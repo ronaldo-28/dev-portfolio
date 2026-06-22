@@ -214,7 +214,7 @@ export const Hero = () => {
 
   <div
     className={`relative overflow-hidden transition-all duration-500 ease-in-out ${
-      skillsExpanded ? "max-h-[420px]" : "max-h-20"
+      skillsExpanded ? "max-h-105" : "max-h-20"
     }`}
   >
     {skillsExpanded ? (
