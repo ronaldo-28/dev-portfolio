@@ -3,7 +3,7 @@ import {ArrowRight, Download, ChevronDown} from "lucide-react";
 import { AnimatedBorderButton} from "@/components/AnimatedBorderButton";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const skills = [
   "HTML",
@@ -12,24 +12,33 @@ const skills = [
   "TypeScript",
   "React",
   "Next.js",
-  "Tailwind CSS",
-  "Git",
-  "GitHub",
-  "Vercel",
-  "Figma",
   "Node.js",
   "Express.js",
   "MongoDB",
-  "Python",
-  "Django",
-  "MySQL",
-  "PostgreSQL",
-  "GitLab",
-  "Jest",
-  "React Testing Library",
+  "Axios",
+  "JWT",
+  "Swagger",
+  "Vite",
+  "Redux Toolkit",
+  "Redis",
+  "Postman",
+  "Git",
+  "GitHub",
+  "Linux",
+  "Docker",
+  "NPM",
+  "Bootstrap",
+
 ]
 
+// Rendered twice back-to-back for the marquee so the `-50%` translate in
+// the `animate-marquee` keyframe has a full duplicate set to scroll into —
+// otherwise the tail end of the list never enters view before the loop resets.
+const marqueeSkills = [...skills, ...skills];
+
 export const Hero = () => {
+  const [skillsExpanded, setSkillsExpanded] = useState(false);
+
   // Warm the browser cache for the resume as soon as the Hero mounts.
   // By the time the user actually clicks "Download CV", the file is
   // usually already cached, so the click itself feels instant instead
@@ -37,6 +46,10 @@ export const Hero = () => {
   useEffect(() => {
     fetch("/Resume.pdf", { cache: "force-cache" }).catch(() => {});
   }, []);
+
+  const handleToggleSkills = () => {
+    setSkillsExpanded((prev) => !prev);
+  };
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -199,28 +212,64 @@ export const Hero = () => {
         <div className="mt-20 animate-fade-in animation-delay-600">
   <p className="text-sm text-muted-foreground mb-6 text-center">Technologies I work with</p>
 
-  <div className="relative overflow-hidden">
-    <div className="flex animate-marquee">
-      {skills.map((skill, idx) => (
-        <div key={idx} className="shrink-0 px-8 py-4">
-          <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">{skill}</span>
+  <div
+    className={`relative overflow-hidden transition-all duration-500 ease-in-out ${
+      skillsExpanded ? "max-h-[420px]" : "max-h-20"
+    }`}
+  >
+    {skillsExpanded ? (
+      <div className="flex flex-wrap justify-center gap-3 px-6 py-2 animate-fade-in">
+        {skills.map((skill, idx) => (
+          <span
+            key={idx}
+            className="px-5 py-2 rounded-full glass text-sm font-medium text-muted-foreground border border-transparent hover:text-primary hover:border-primary/50 transition-all duration-300"
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    ) : (
+      <>
+        <style>{`
+          @keyframes heroSkillsMarquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+          }
+        `}</style>
+        <div
+          className="flex w-max"
+          style={{ animation: "heroSkillsMarquee 30s linear infinite" }}
+        >
+          {marqueeSkills.map((skill, idx) => (
+            <div key={idx} className="shrink-0 px-8 py-4">
+              <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">{skill}</span>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </>
+    )}
   </div>
 </div>
       </div>
       <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20
       animate-fade-in animation-delay-800"
       >
-        <a
-          href="#about"
+        <button
+          type="button"
+          onClick={handleToggleSkills}
+          aria-expanded={skillsExpanded}
           className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
         >
-          <span className="text-xs uppercase tracking-wider">Scroll</span>
-          <ChevronDown className="w-6 h-6 animate-bounce" />
-        </a>
+          <span className="text-xs uppercase tracking-wider">
+            {skillsExpanded ? "Collapse" : "Scroll"}
+          </span>
+          <ChevronDown
+            className={`w-6 h-6 transition-transform duration-300 ${
+              skillsExpanded ? "rotate-180" : "animate-bounce"
+            }`}
+          />
+        </button>
       </div>
 
     </section>
