@@ -1,20 +1,44 @@
 const experiences = [
   {
-    period: "June 2021 - Sept 2021",
-    role: "UI/ UX Developer Intern",
-    company: "Imagine Works",
+    period: "Feb 2024 to March 2026",
+    role: "Subject Matter Expert",
+    company: "Chegg",
     description:
-      "Created wireframes for portfolio website, ecommerce website.",
-    technologies: ["React", "TypeScript", "Next.js", "GraphQL"],
+      "Solved 1000+ questions on various topics in Mathematics. ",
+    technologies: [],
     current: false
   },
   {
-    period: "Sept 2021",
-    role: "Data Science Intern",
-    company: "Padre Conceicao College of Engineering, Verna (PCCE) ",
+    period: "June 2023 to July 2023",
+    role: "Associate IT Analyst",
+    company: "Government of Goa Directorate of Transport",
     description:
-      "Performed eda on the dataset, visualized the data using matplotlib, performed data cleaning and feature selection using R.",
-    technologies: ["React", "TypeScript", "Next.js", "GraphQL"],
+       `
+      Analysed tax records using Excel and SQL to uncover 150+ anomalies, improving Taxation Department processing efficiency by 30%.
+
+      Identified 200+ tax defaulters through data mining in Python, issuing 180 permit suspension notices and increasing compliance by 22%.
+
+      Processed and reconciled tax payments via Parivahan, managing ₹4 lakh+ in monthly transactions with 99.8% accuracy.
+    `,
+    technologies: ["Exel", "SQL", "Python", "Scikit-learn", "Pandas", "Numpy", "Matplotlib", "Seaborn"],
+    current: false
+  },
+  {
+    period: "June 2023 to July 2023",
+    role: "Full Stack Web Developer Intern",
+    company: "Prepinsta Prime",
+    description:
+      "Created various apps for the client like travel website, Task Management Web Application, Quiz App, Portfolio Website.",
+    technologies: ["HTML", "CSS", "JavaScript", "Bootstrap", "React", "Node.js", "Express.js", "MongoDB"],
+    current: false
+  },
+  {
+    period: "June 2023 to July 2023",
+    role: "Trainee Developer - EDI",
+    company: "Tangentia",
+    description:
+      "Converted data to various EDI formats.",
+    technologies: ["AS2", "EDIFACT", "ANSI X12"],
     current: false
   },
   {
@@ -22,37 +46,28 @@ const experiences = [
     role: "Data Analyst Intern",
     company: "MedTourEasy",
     description:
-      "Performed eda on the dataset, visualized the data using matplotlib, performed data cleaning and feature selection and machine learning using python and scikit-learn.",
-    technologies: ["React", "TypeScript", "Next.js", "GraphQL"],
+      "Performed EDA on the dataset, visualized the data using matplotlib, performed data cleaning and feature selection and machine learning using python and scikit-learn.",
+    technologies: ["Python", "Scikit-learn", "Pandas", "Numpy", "Matplotlib", "Seaborn"],
     current: false
   },
   {
-    period: "June 2023 to July 2023",
-    role: "Trainee Developer - EDI",
-    company: "Tangentia",
+    period: "Sept 2021",
+    role: "Data Science Intern",
+    company: "Padre Conceicao College of Engineering, Verna (PCCE) ",
     description:
-      "Converted data to various EDI formats",
-    technologies: ["React", "TypeScript", "Next.js", "GraphQL"],
+      "Performed EDA on the dataset, visualized the data using matplotlib, performed data cleaning and feature selection using R.",
+    technologies: ["R", "SQL"],
     current: false
   },
   {
-    period: "June 2023 to July 2023",
-    role: "Trainee Developer - EDI",
-    company: "Tangentia",
+    period: "June 2021 - Sept 2021",
+    role: "UI/ UX Developer Intern",
+    company: "Imagine Works",
     description:
-      "Converted data to various EDI formats",
-    technologies: ["React", "TypeScript", "Next.js", "GraphQL"],
+      "Created wireframes for portfolio website, ecommerce website.",
+    technologies: ["Figma"],
     current: false
   },
-  {
-    period: "June 2023 to July 2023",
-    role: "Trainee Developer - EDI",
-    company: "Tangentia",
-    description:
-      "Converted data to various EDI formats",
-    technologies: ["React", "TypeScript", "Next.js", "GraphQL"],
-    current: false
-  }
 ]
 export const Experience = () => {
   return (
