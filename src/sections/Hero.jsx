@@ -3,7 +3,7 @@ import {ArrowRight, Download, ChevronDown} from "lucide-react";
 import { AnimatedBorderButton} from "@/components/AnimatedBorderButton";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const skills = [
   { name: "React", level: "Expert", years: "4+", progress: 92 },
@@ -33,6 +33,7 @@ const marqueeSkills = [...skills, ...skills].map(
 
 export const Hero = () => {
   const [skillsExpanded, setSkillsExpanded] = useState(false);
+  const skillsRef = useRef(null);
 
   // Warm the browser cache for the resume as soon as the Hero mounts.
   // By the time the user actually clicks "Download CV", the file is
@@ -43,8 +44,21 @@ export const Hero = () => {
   }, []);
 
   const handleToggleSkills = () => {
-    setSkillsExpanded((prev) => !prev);
-  };
+  if (!skillsExpanded) {
+    setSkillsExpanded(true);
+
+    setTimeout(() => {
+      skillsRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+
+    return;
+  }
+
+  setSkillsExpanded(false);
+};
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -205,7 +219,10 @@ export const Hero = () => {
         </div>
         {/* Skills Section */}
 
-<div className="mt-16 max-w-4xl mx-auto">
+<div
+  ref={skillsRef}
+  className="mt-16 max-w-4xl mx-auto"
+>
   <h3 className="text-center text-xl font-semibold mb-8">
     Proficiency & Experience
   </h3>
@@ -266,7 +283,7 @@ export const Hero = () => {
             key={idx}
             className="px-5 py-2 rounded-full glass text-sm font-medium text-muted-foreground border border-transparent hover:text-primary hover:border-primary/50 transition-all duration-300"
           >
-            {skill}
+            {skill.name}
           </span>
         ))}
       </div>
