@@ -3,6 +3,7 @@ import {ArrowRight, Download, ChevronDown} from "lucide-react";
 import { AnimatedBorderButton} from "@/components/AnimatedBorderButton";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
+import { useEffect } from "react";
 
 const skills = [
   "HTML",
@@ -29,6 +30,14 @@ const skills = [
 ]
 
 export const Hero = () => {
+  // Warm the browser cache for the resume as soon as the Hero mounts.
+  // By the time the user actually clicks "Download CV", the file is
+  // usually already cached, so the click itself feels instant instead
+  // of waiting for the fetch to start on click.
+  useEffect(() => {
+    fetch("/Resume.pdf", { cache: "force-cache" }).catch(() => {});
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
 
