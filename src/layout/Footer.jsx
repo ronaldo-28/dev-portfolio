@@ -27,9 +27,27 @@ export const Footer = () => {
             <a href="#" className="text-xl font-bold tracking-tight">
             MRF<span className="text-primary">.</span>
             </a>
-            <p className="text-sm text-muted-foreground mt-2">
-              © {currentYear} Mafron Ronaldo Fernandes. All rights reserved.
-            </p>
+           <div className="mt-2 space-y-2">
+  <p className="text-sm text-muted-foreground">
+    © {currentYear} Mafron Ronaldo Fernandes. All rights reserved.
+  </p>
+
+  <p className="flex items-center justify-center md:justify-start gap-1 text-sm text-muted-foreground">
+    Built with
+    <Heart
+      className="
+        w-4 h-4
+        fill-red-500
+        text-red-500
+        animate-heartbeat
+        hover:scale-125
+        hover:drop-shadow-[0_0_12px_rgba(239,68,68,.8)]
+        transition-all
+      "
+    />
+    and lots of caffeine
+  </p>
+</div>
           </div>
 
           {/* Links */}

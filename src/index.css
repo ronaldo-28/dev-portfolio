@@ -119,6 +119,68 @@
     }
   }
 
+  @keyframes heartbeat {
+    0% {
+      transform: scale(1);
+    }
+
+    14% {
+      transform: scale(1.18);
+    }
+
+    28% {
+      transform: scale(1);
+    }
+
+    42% {
+      transform: scale(1.18);
+    }
+
+    70% {
+      transform: scale(1);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fill-skill {
+    from {
+      width: 0;
+    }
+
+    to {
+      width: var(--progress);
+    }
+  }
+
+  .skill-fill {
+    height: 100%;
+
+    border-radius: 999px;
+
+    background:
+      linear-gradient(90deg,
+        var(--color-primary),
+        color-mix(in srgb,
+          var(--color-primary) 60%,
+          white));
+
+    box-shadow:
+      0 0 18px color-mix(in srgb,
+        var(--color-primary) 40%,
+        transparent);
+
+    transition:
+      width .9s ease;
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 1.8s ease-in-out infinite;
+    transform-origin: center;
+  }
+
   .animate-fade-in {
     animation: fade-in 0.8s ease-out both;
   }

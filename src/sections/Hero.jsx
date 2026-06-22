@@ -6,35 +6,30 @@ import { SiLeetcode } from "react-icons/si";
 import { useEffect, useState } from "react";
 
 const skills = [
-  "HTML",
-  "CSS",
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "Express.js",
-  "MongoDB",
-  "Axios",
-  "JWT",
-  "Swagger",
-  "Vite",
-  "Redux Toolkit",
-  "Redis",
-  "Postman",
-  "Git",
-  "GitHub",
-  "Linux",
-  "Docker",
-  "NPM",
-  "Bootstrap",
-
-]
+  { name: "React", level: "Expert", years: "4+", progress: 92 },
+  { name: "Next.js", level: "Advanced", years: "2+", progress: 85 },
+  { name: "TypeScript", level: "Advanced", years: "2+", progress: 82 },
+  { name: "Node.js", level: "Advanced", years: "3+", progress: 84 },
+  { name: "Express.js", level: "Advanced", years: "3+", progress: 85 },
+  { name: "MongoDB", level: "Advanced", years: "3+", progress: 82 },
+  { name: "Redux Toolkit", level: "Advanced", years: "2+", progress: 80 },
+  { name: "Tailwind", level: "Expert", years: "3+", progress: 95 },
+  { name: "Docker", level: "Intermediate", years: "1+", progress: 65 },
+  { name: "Redis", level: "Intermediate", years: "1+", progress: 60 },
+  { name: "Postman", level: "Intermediate", years: "1+", progress: 60 },
+  { name: "Git", level: "Intermediate", years: "1+", progress: 60 },
+  { name: "GitHub", level: "Intermediate", years: "1+", progress: 60 },
+  { name: "Linux", level: "Intermediate", years: "1+", progress: 60 },
+  { name: "NPM", level: "Intermediate", years: "1+", progress: 60 },
+  { name: "Bootstrap", level: "Intermediate", years: "1+", progress: 60 },
+];
 
 // Rendered twice back-to-back for the marquee so the `-50%` translate in
 // the `animate-marquee` keyframe has a full duplicate set to scroll into —
 // otherwise the tail end of the list never enters view before the loop resets.
-const marqueeSkills = [...skills, ...skills];
+const marqueeSkills = [...skills, ...skills].map(
+  (skill) => skill.name
+);
 
 export const Hero = () => {
   const [skillsExpanded, setSkillsExpanded] = useState(false);
@@ -209,6 +204,53 @@ export const Hero = () => {
           </div>
         </div>
         {/* Skills Section */}
+
+<div className="mt-16 max-w-4xl mx-auto">
+  <h3 className="text-center text-xl font-semibold mb-8">
+    Proficiency & Experience
+  </h3>
+
+  <div className="grid md:grid-cols-2 gap-5">
+    {skills.map((skill) => (
+      <div
+        key={skill.name}
+        className="glass rounded-2xl p-5 hover:glow-border transition-all duration-300"
+      >
+        <div className="flex justify-between mb-3">
+          <div>
+            <h4 className="font-semibold">
+              {skill.name}
+            </h4>
+
+            <p className="text-xs text-muted-foreground">
+              {skill.level}
+            </p>
+          </div>
+
+          <div className="text-right">
+            <span className="text-primary font-semibold">
+              {skill.years}
+            </span>
+
+            <p className="text-xs text-muted-foreground">
+              experience
+            </p>
+          </div>
+        </div>
+
+        <div className="h-2 rounded-full bg-muted overflow-hidden">
+          <div
+            className="skill-fill"
+            style={{
+              width: `${skill.progress}%`,
+            }}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
         <div className="mt-20 animate-fade-in animation-delay-600">
   <p className="text-sm text-muted-foreground mb-6 text-center">Technologies I work with</p>
 

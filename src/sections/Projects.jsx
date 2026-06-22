@@ -5,53 +5,77 @@ import { AnimatedBorderButton } from "@/components/AnimatedBorderButton";
 
 const projects = [
   {
-    title: "Project 1",
-    description: "Description of Project 1",
+    title: "E-Commerce Platform",
+    category: "MERN",
+    description: "Full-stack ecommerce with payments",
     image: "projects/project1.png",
-    tags: ["tag1", "tag2", "tag3"],
-    link: "https://example.com/project1",
-    github: "https://github.com/username/project1",
+    tags: ["React", "Node", "MongoDB"],
+    link: "#",
+    github: "#",
   },
+
   {
-    title: "Project 2",
-    description: "Description of Project 2",
+    title: "Project Management App",
+    category: "MERN",
+    description: "Trello style collaboration",
     image: "projects/project2.png",
-    tags: ["tag1", "tag2", "tag3"],
-    link: "https://example.com/project2",
-    github: "https://github.com/username/project2",
+    tags: ["React", "Socket.io"],
+    link: "#",
+    github: "#",
   },
+
   {
-    title: "Project 3",
-    description: "Description of Project 3",
+    title: "Social Media App",
+    category: "MERN",
+    description: "Realtime social platform",
     image: "projects/project3.png",
-    tags: ["tag1", "tag2", "tag3"],
-    link: "https://example.com/project3",
-    github: "https://github.com/username/project3",
+    tags: ["Express", "MongoDB"],
+    link: "#",
+    github: "#",
   },
+
   {
-    title: "Project 4",
-    description: "Description of Project 4",
+    title: "AI Job Tracker",
+    category: "Next.js",
+    description: "Track jobs with AI insights",
     image: "projects/project4.png",
-    tags: ["tag1", "tag2", "tag3"],
-    link: "https://example.com/project4",
-    github: "https://github.com/username/project4",
+    tags: ["Next.js", "TS"],
+    link: "#",
+    github: "#",
   },
+
   {
-    title: "Project 5",
-    description: "Description of Project 5",
+    title: "Analytics Dashboard",
+    category: "Next.js",
+    description: "Modern SaaS analytics",
     image: "projects/project5.png",
-    tags: ["tag1", "tag2", "tag3"],
-    link: "https://example.com/project5",
-    github: "https://github.com/username/project5",
+    tags: ["Next.js", "Prisma"],
+    link: "#",
+    github: "#",
   },
 ];
 
 export const Projects = () => {
   const [showAll, setShowAll] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  const visibleProjects = showAll
+  const categories = [
+  "All",
+  ...new Set(projects.map((p) => p.category)),
+];
+
+const filteredProjects =
+  activeCategory === "All"
     ? projects
-    : projects.slice(0, 3);
+    : projects.filter(
+        (project) =>
+          project.category === activeCategory
+      );
+
+const visibleProjects =
+  showAll
+    ? filteredProjects
+    : filteredProjects.slice(0, 3);
 
   return (
     <section id="projects" className="py-32 relative overflow-hidden">
@@ -80,69 +104,145 @@ export const Projects = () => {
         </div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {visibleProjects.map((project, idx) => (
-            <div
-              key={idx}
-              className="group glass rounded-2xl overflow-hidden"
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+  {categories.map((category) => (
+    <button
+      key={category}
+      onClick={() => {
+        setActiveCategory(category);
+        setShowAll(false);
+      }}
+      className={`
+        px-5 py-2 rounded-full
+        transition-all duration-300
+
+        ${
+          activeCategory === category
+            ? `
+              bg-primary
+              text-background
+              shadow-[0_0_30px_rgba(32,178,166,.3)]
+            `
+            : `
+              glass
+              text-muted-foreground
+              hover:text-primary
+            `
+        }
+      `}
+    >
+      {category}
+    </button>
+  ))}
+</div>
+
+{/* Project Grid */}
+
+<div className="grid md:grid-cols-2 gap-8">
+  {visibleProjects.map((project) => (
+    <div
+      key={project.title}
+      className="
+        group
+        glass
+        rounded-2xl
+        overflow-hidden
+        hover:-translate-y-2
+        transition-all
+        duration-500
+      "
+    >
+      <div className="relative overflow-hidden aspect-video">
+
+        <img
+          src={project.image}
+          alt={project.title}
+          className="
+            w-full
+            h-full
+            object-cover
+            group-hover:scale-110
+            transition
+            duration-700
+          "
+        />
+
+        <div
+          className="
+            absolute
+            inset-0
+            bg-black/40
+            opacity-0
+            group-hover:opacity-100
+            transition
+            flex
+            items-center
+            justify-center
+            gap-4
+          "
+        >
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noreferrer"
+            className="p-3 rounded-full glass"
+          >
+            <ArrowUpRight />
+          </a>
+
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noreferrer"
+            className="p-3 rounded-full glass"
+          >
+            <FaGithub />
+          </a>
+        </div>
+      </div>
+
+      <div className="p-6 space-y-4">
+
+        <div className="flex items-center justify-between">
+
+          <h3 className="text-xl font-semibold">
+            {project.title}
+          </h3>
+
+          <span className="text-xs text-primary">
+            {project.category}
+          </span>
+
+        </div>
+
+        <p className="text-muted-foreground">
+          {project.description}
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="
+                px-3
+                py-1
+                rounded-full
+                glass
+                text-xs
+              "
             >
-
-              <div className="relative overflow-hidden aspect-video">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition"
-                />
-
-                <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
-
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-3 rounded-full glass"
-                  >
-                    <ArrowUpRight />
-                  </a>
-
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-3 rounded-full glass"
-                  >
-                    <FaGithub />
-                  </a>
-
-                </div>
-              </div>
-
-              <div className="p-6 space-y-4">
-                <h3 className="text-xl font-semibold">
-                  {project.title}
-                </h3>
-
-                <p className="text-muted-foreground">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-4 py-1 rounded-full border"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+              {tag}
+            </span>
           ))}
         </div>
 
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* Button */}
-        {!showAll && projects.length > 3 && (
+        {!showAll && filteredProjects.length > 3 > 3 && (
           <div className="text-center mt-12">
             <div onClick={() => setShowAll(true)}>
               <AnimatedBorderButton>
