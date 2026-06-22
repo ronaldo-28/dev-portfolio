@@ -141,26 +141,26 @@ export const Hero = () => {
     </AnimatedBorderButton>
   </a>
             </div>
+
+            {/* Social Links */}
+            <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
+              <span className="text-sm text-muted-foreground">Follow:</span>
+
+              {[
+                { icon: FaGithub, href: "https://github.com/ronaldo-28" },
+                { icon: FaLinkedin, href: "https://linkedin.com/in/mafronfernandes/" },
+                { icon: SiLeetcode, href: "https://leetcode.com/u/mafronfernandes28/" },
+              ].map((social, idx) => {
+                const Icon = social.icon;
+
+                return (
+                  <a key={idx} href={social.href} target="_blank" rel="noreferrer" className="p-2 rounded-full hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                    <Icon className="w-5 h-5" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
-          {/* Social Links */}
-    <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
-      <span className="text-sm text-muted-foreground">Follow:</span>
-
-      {[
-        { icon: FaGithub, href: "https://github.com/ronaldo-28" },
-        { icon: FaLinkedin, href: "https://linkedin.com/in/mafronfernandes/" },
-        { icon: SiLeetcode, href: "https://leetcode.com/u/mafronfernandes28/" },
-      ].map((social, idx) => {
-        const Icon = social.icon;
-
-        return (
-          <a key={idx} href={social.href} target="_blank" rel="noreferrer" className="p-2 rounded-full hover:bg-primary/10 hover:text-primary transition-all duration-300">
-            <Icon className="w-5 h-5" />
-          </a>
-        );
-      })}
-
-</div>
 
           {/* Right Column - Profile Image */}
           <div className="relative animate-fade-in animation-delay-300">
