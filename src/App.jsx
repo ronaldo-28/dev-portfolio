@@ -1,6 +1,7 @@
 import {Navbar} from '@/layout/Navbar'
 import {Hero} from '@/sections/Hero'
 import {About} from '@/sections/About'
+import {Education} from '@/sections/Education'
 import {Projects} from '@/sections/Projects'
 import {Certificates} from '@/sections/Certificates'
 import {Experience} from '@/sections/Experience'
@@ -15,6 +16,7 @@ function App() {
       <main>
         <Hero />
         <About />
+        <Education />
         <Projects />
         <Experience />
         {/* <Testimonials /> */}

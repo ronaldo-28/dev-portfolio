@@ -413,7 +413,7 @@ const CERTIFICATES = [
     recipient: 'Mafron Ronaldo Fernandes',
     dateLabel: '04/25/2026',
     duration: 52.5 + ' hours',
-    blurb: 'Verified certificate of completion issued by Udemy.',
+    blurb: 'Verified — This certificate verifies successful completion of the course. The entire course was completed and validated by the student.',
     link: 'https://www.udemy.com/certificate/UC-05b62927-81e9-4a8e-9811-6d18420cad07/',
     courses: [],
     placeholder: false,
