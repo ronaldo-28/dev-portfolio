@@ -7,7 +7,6 @@ const educationData = [
     degree: "B.E. in Computer Engineering",
     board: "Goa University",
     duration: "JULY 2018 — AUGUST 2022",
-    score: "68.33%",
   },
   {
     institution: "Infant Jesus Higher Secondary School",
@@ -15,7 +14,6 @@ const educationData = [
     degree: "12th Standard",
     board: "Goa Board",
     duration: "JUNE 2017 — MARCH 2018",
-    score: "53.83%",
   },
   {
     institution: "Auxilium High School",
@@ -23,7 +21,6 @@ const educationData = [
     degree: "10th Standard",
     board: "Goa Board",
     duration: "JUNE 2015 — MARCH 2016",
-    score: "68.66%",
   },
 ];
 
@@ -123,10 +120,6 @@ export const Education = () => {
                         {item.location}
                       </p>
                     </div>
-
-                    <span className="rounded-full bg-primary/10 px-3 py-1 text-primary">
-                      {item.score}
-                    </span>
                   </div>
 
                   <p className="mt-4 text-sm font-medium text-primary">
