@@ -6,6 +6,7 @@ const navLinks = [
   { href: "#about", label: "About" },
   { href: "#projects", label: "Projects" },
   { href: "#experience", label: "Experience" },
+  { href: "#certificates", label: "Certificates" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -15,30 +16,38 @@ export const Navbar = () => {
   const [activeSection, setActiveSection] = useState("#about");
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+  const handleScroll = () => {
+    setIsScrolled(window.scrollY > 50);
 
-      const sections = document.querySelectorAll("section[id]");
+    const sections = document.querySelectorAll("section[id]");
 
-      let current = "#about";
+    let current = "";
 
-      sections.forEach((section) => {
-        const offsetTop = section.offsetTop - 120; // navbar offset fix
-        const offsetBottom = offsetTop + section.offsetHeight;
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
 
-        if (window.scrollY >= offsetTop && window.scrollY < offsetBottom) {
-          current = `#${section.id}`;
-        }
-      });
+      // Active when section center enters viewport
+      if (
+        rect.top <= window.innerHeight * 0.35 &&
+        rect.bottom >= window.innerHeight * 0.35
+      ) {
+        current = `#${section.id}`;
+      }
+    });
 
+    if (current) {
       setActiveSection(current);
-    };
+    }
+  };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
+  window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  handleScroll();
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
 
   return (
     <header
@@ -64,7 +73,7 @@ export const Navbar = () => {
                   href={link.href}
                   className={`px-4 py-2 text-sm rounded-full transition-all duration-300 ${
                     isActive
-                      ? "text-foreground bg-primary/15 shadow-[0_0_16px_-2px_hsl(var(--primary)/0.65)]"
+                      ? "? text-primary bg-primary/20 shadow-[0_0_28px_4px_hsl(var(--primary)/0.8)] scale-105"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
