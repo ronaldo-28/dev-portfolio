@@ -3,37 +3,76 @@ import {ArrowRight, Download, ChevronDown} from "lucide-react";
 import { AnimatedBorderButton} from "@/components/AnimatedBorderButton";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-const skills = [
-  { name: "React", level: "Expert", years: "4+", progress: 92 },
-  { name: "Next.js", level: "Advanced", years: "2+", progress: 85 },
-  { name: "TypeScript", level: "Advanced", years: "2+", progress: 82 },
-  { name: "Node.js", level: "Advanced", years: "3+", progress: 84 },
-  { name: "Express.js", level: "Advanced", years: "3+", progress: 85 },
-  { name: "MongoDB", level: "Advanced", years: "3+", progress: 82 },
-  { name: "Redux Toolkit", level: "Advanced", years: "2+", progress: 80 },
-  { name: "Tailwind", level: "Expert", years: "3+", progress: 95 },
-  { name: "Docker", level: "Intermediate", years: "1+", progress: 65 },
-  { name: "Redis", level: "Intermediate", years: "1+", progress: 60 },
-  { name: "Postman", level: "Intermediate", years: "1+", progress: 60 },
-  { name: "Git", level: "Intermediate", years: "1+", progress: 60 },
-  { name: "GitHub", level: "Intermediate", years: "1+", progress: 60 },
-  { name: "Linux", level: "Intermediate", years: "1+", progress: 60 },
-  { name: "NPM", level: "Intermediate", years: "1+", progress: 60 },
-  { name: "Bootstrap", level: "Intermediate", years: "1+", progress: 60 },
+// ---------------------------------------------------------------------------
+// Skills data — edit this array to add/update skills or move them between
+// categories. The "Data Science" entries are placeholders inferred from your
+// Coursera/Udemy certificates (Python, ML, Data Analyst, etc.) — adjust the
+// level/years/progress to match your actual confidence, or remove them.
+// ---------------------------------------------------------------------------
+const SKILLS = [
+  { name: "React", level: "Expert", years: "4+", progress: 92, category: "Web Development" },
+  { name: "Next.js", level: "Advanced", years: "2+", progress: 85, category: "Web Development" },
+  { name: "TypeScript", level: "Advanced", years: "2+", progress: 82, category: "Web Development" },
+  { name: "Node.js", level: "Advanced", years: "3+", progress: 84, category: "Web Development" },
+  { name: "Express.js", level: "Advanced", years: "3+", progress: 85, category: "Web Development" },
+  { name: "MongoDB", level: "Advanced", years: "3+", progress: 82, category: "Web Development" },
+  { name: "Redux Toolkit", level: "Advanced", years: "2+", progress: 80, category: "Web Development" },
+  { name: "Tailwind", level: "Expert", years: "3+", progress: 95, category: "Web Development" },
+  { name: "Bootstrap", level: "Intermediate", years: "1+", progress: 60, category: "Web Development" },
+
+  { name: "Docker", level: "Intermediate", years: "1+", progress: 65, category: "Tools" },
+  { name: "Redis", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
+  { name: "Postman", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
+  { name: "Git", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
+  { name: "GitHub", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
+  { name: "Linux", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
+  { name: "NPM", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
+
+  { name: "Python", level: "Advanced", years: "3+", progress: 78, category: "Data Science", placeholder: true },
+  { name: "Pandas & NumPy", level: "Intermediate", years: "2+", progress: 65, category: "Data Science", placeholder: true },
+  { name: "SQL", level: "Intermediate", years: "2+", progress: 68, category: "Data Science", placeholder: true },
+  { name: "Scikit-learn", level: "Intermediate", years: "1+", progress: 60, category: "Data Science", placeholder: true },
 ];
 
+const SKILL_TABS = ["All", "Web Development", "Tools", "Data Science"];
+const VISIBLE_SKILLS_COUNT = 8;
+
 // Rendered twice back-to-back for the marquee so the `-50%` translate in
-// the `animate-marquee` keyframe has a full duplicate set to scroll into —
+// the `heroSkillsMarquee` keyframe has a full duplicate set to scroll into —
 // otherwise the tail end of the list never enters view before the loop resets.
-const marqueeSkills = [...skills, ...skills].map(
-  (skill) => skill.name
-);
+const marqueeSkills = [...SKILLS, ...SKILLS].map((skill) => skill.name);
+
+function SkillCard({ skill }) {
+  return (
+    <div className="glass rounded-2xl p-5 hover:glow-border transition-all duration-300">
+      <div className="flex justify-between mb-3">
+        <div>
+          <h4 className={`font-semibold ${skill.placeholder ? "text-highlight italic" : ""}`}>
+            {skill.name}
+          </h4>
+          <p className="text-xs text-muted-foreground">{skill.level}</p>
+        </div>
+
+        <div className="text-right">
+          <span className="text-primary font-semibold">{skill.years}</span>
+          <p className="text-xs text-muted-foreground">experience</p>
+        </div>
+      </div>
+
+      <div className="h-2 rounded-full bg-muted overflow-hidden">
+        <div className="skill-fill" style={{ width: `${skill.progress}%` }} />
+      </div>
+    </div>
+  );
+}
 
 export const Hero = () => {
-  const [skillsExpanded, setSkillsExpanded] = useState(false);
-  const skillsRef = useRef(null);
+  const [activeSkillTab, setActiveSkillTab] = useState("All");
+  const [showAllSkills, setShowAllSkills] = useState(false);
+  const [marqueeExpanded, setMarqueeExpanded] = useState(false);
+  const marqueeRef = useRef(null);
 
   // Warm the browser cache for the resume as soon as the Hero mounts.
   // By the time the user actually clicks "Download CV", the file is
@@ -43,22 +82,40 @@ export const Hero = () => {
     fetch("/Resume.pdf", { cache: "force-cache" }).catch(() => {});
   }, []);
 
-  const handleToggleSkills = () => {
-  if (!skillsExpanded) {
-    setSkillsExpanded(true);
+  const handleToggleMarquee = () => {
+    if (!marqueeExpanded) {
+      setMarqueeExpanded(true);
 
-    setTimeout(() => {
-      skillsRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
+      setTimeout(() => {
+        marqueeRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
 
-    return;
-  }
+      return;
+    }
 
-  setSkillsExpanded(false);
-};
+    setMarqueeExpanded(false);
+  };
+
+  const filteredSkills = useMemo(
+    () =>
+      activeSkillTab === "All"
+        ? SKILLS
+        : SKILLS.filter((s) => s.category === activeSkillTab),
+    [activeSkillTab]
+  );
+
+  const visibleSkills = showAllSkills
+    ? filteredSkills
+    : filteredSkills.slice(0, VISIBLE_SKILLS_COUNT);
+  const hasMoreSkills = filteredSkills.length > VISIBLE_SKILLS_COUNT;
+
+  const handleSkillTabChange = (tab) => {
+    setActiveSkillTab(tab);
+    setShowAllSkills(false);
+  };
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
@@ -151,17 +208,17 @@ export const Hero = () => {
             {/* CTA */}
             <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
               <a href="#contact">
-  <Button size="lg">
-    Contact Me
-    <ArrowRight className="w-5 h-5" />
-  </Button>
-</a>
+                <Button size="lg">
+                  Contact Me
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              </a>
               <a href="/Resume.pdf" download="Resume.pdf">
-    <AnimatedBorderButton>
-      <Download className="w-5 h-5" />
-      Download CV
-    </AnimatedBorderButton>
-  </a>
+                <AnimatedBorderButton>
+                  <Download className="w-5 h-5" />
+                  Download CV
+                </AnimatedBorderButton>
+              </a>
             </div>
 
             {/* Social Links */}
@@ -217,115 +274,134 @@ export const Hero = () => {
           </div>
           </div>
         </div>
-        {/* Skills Section */}
 
-<div
-  ref={skillsRef}
-  className="mt-16 max-w-4xl mx-auto"
->
-  <h3 className="text-center text-xl font-semibold mb-8">
-    Proficiency & Experience
-  </h3>
-
-  <div className="grid md:grid-cols-2 gap-5">
-    {skills.map((skill) => (
-      <div
-        key={skill.name}
-        className="glass rounded-2xl p-5 hover:glow-border transition-all duration-300"
-      >
-        <div className="flex justify-between mb-3">
-          <div>
-            <h4 className="font-semibold">
-              {skill.name}
-            </h4>
-
-            <p className="text-xs text-muted-foreground">
-              {skill.level}
+        {/* Skills (kept inside Hero, organized into tabs) */}
+        <section id="skills" className="mt-20 max-w-4xl mx-auto scroll-mt-28 animate-fade-in animation-delay-600">
+          <div className="text-center mb-10">
+            <p className="text-sm uppercase tracking-widest text-primary font-semibold">
+              Proficiency &amp; Experience
             </p>
+            <h3 className="mt-2 text-2xl sm:text-3xl font-bold">Skills</h3>
           </div>
 
-          <div className="text-right">
-            <span className="text-primary font-semibold">
-              {skill.years}
-            </span>
+          {/* Tabs */}
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            {SKILL_TABS.map((tab) => {
+              const isActive = activeSkillTab === tab;
+              const count =
+                tab === "All" ? SKILLS.length : SKILLS.filter((s) => s.category === tab).length;
 
-            <p className="text-xs text-muted-foreground">
-              experience
-            </p>
+              return (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => handleSkillTabChange(tab)}
+                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    isActive
+                      ? "bg-primary/20 text-primary glow-border"
+                      : "glass text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {tab}
+                  <span className={isActive ? "ml-2 text-xs text-primary/70" : "ml-2 text-xs text-muted-foreground/60"}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
-        </div>
 
-        <div className="h-2 rounded-full bg-muted overflow-hidden">
-          <div
-            className="skill-fill"
-            style={{
-              width: `${skill.progress}%`,
-            }}
-          />
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
+          {/* Grid */}
+          <div className="grid md:grid-cols-2 gap-5">
+            {visibleSkills.map((skill) => (
+              <SkillCard key={skill.name} skill={skill} />
+            ))}
+          </div>
 
-        <div className="mt-20 animate-fade-in animation-delay-600">
-  <p className="text-sm text-muted-foreground mb-6 text-center">Technologies I work with</p>
+          {filteredSkills.length === 0 && (
+            <p className="text-center text-muted-foreground mt-10">
+              No skills tagged in this category yet.
+            </p>
+          )}
 
-  <div
-    className={`relative overflow-hidden transition-all duration-500 ease-in-out ${
-      skillsExpanded ? "max-h-105" : "max-h-20"
-    }`}
-  >
-    {skillsExpanded ? (
-      <div className="flex flex-wrap justify-center gap-3 px-6 py-2 animate-fade-in">
-        {skills.map((skill, idx) => (
-          <span
-            key={idx}
-            className="px-5 py-2 rounded-full glass text-sm font-medium text-muted-foreground border border-transparent hover:text-primary hover:border-primary/50 transition-all duration-300"
-          >
-            {skill.name}
-          </span>
-        ))}
-      </div>
-    ) : (
-      <>
-        <style>{`
-          @keyframes heroSkillsMarquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-          }
-        `}</style>
-        <div
-          className="flex w-max"
-          style={{ animation: "heroSkillsMarquee 30s linear infinite" }}
-        >
-          {marqueeSkills.map((skill, idx) => (
-            <div key={idx} className="shrink-0 px-8 py-4">
-              <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">{skill}</span>
+          {/* Expand / Collapse */}
+          {hasMoreSkills && (
+            <div className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShowAllSkills((prev) => !prev)}
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-primary glass hover:glow-border transition-all duration-300"
+              >
+                {showAllSkills ? "Show Less" : `Show All ${filteredSkills.length}`}
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform duration-300 ${showAllSkills ? "rotate-180" : ""}`}
+                />
+              </button>
             </div>
-          ))}
+          )}
+        </section>
+
+        {/* Technologies marquee (restored) */}
+        <div ref={marqueeRef} className="mt-20 animate-fade-in animation-delay-600">
+          <p className="text-sm text-muted-foreground mb-6 text-center">Technologies I work with</p>
+
+          <div
+            className={`relative overflow-hidden transition-all duration-500 ease-in-out ${
+              marqueeExpanded ? "max-h-105" : "max-h-20"
+            }`}
+          >
+            {marqueeExpanded ? (
+              <div className="flex flex-wrap justify-center gap-3 px-6 py-2 animate-fade-in">
+                {SKILLS.map((skill) => (
+                  <span
+                    key={skill.name}
+                    className="px-5 py-2 rounded-full glass text-sm font-medium text-muted-foreground border border-transparent hover:text-primary hover:border-primary/50 transition-all duration-300"
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <>
+                <style>{`
+                  @keyframes heroSkillsMarquee {
+                    from { transform: translateX(0); }
+                    to { transform: translateX(-50%); }
+                  }
+                `}</style>
+                <div
+                  className="flex w-max"
+                  style={{ animation: "heroSkillsMarquee 30s linear infinite" }}
+                >
+                  {marqueeSkills.map((skill, idx) => (
+                    <div key={idx} className="shrink-0 px-8 py-4">
+                      <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">{skill}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </>
-    )}
-  </div>
-</div>
       </div>
+
       <div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20
       animate-fade-in animation-delay-800"
       >
         <button
           type="button"
-          onClick={handleToggleSkills}
-          aria-expanded={skillsExpanded}
+          onClick={handleToggleMarquee}
+          aria-expanded={marqueeExpanded}
           className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
         >
           <span className="text-xs uppercase tracking-wider">
-            {skillsExpanded ? "Collapse" : "Scroll"}
+            {marqueeExpanded ? "Collapse" : "Scroll"}
           </span>
           <ChevronDown
             className={`w-6 h-6 transition-transform duration-300 ${
-              skillsExpanded ? "rotate-180" : "animate-bounce"
+              marqueeExpanded ? "rotate-180" : "animate-bounce"
             }`}
           />
         </button>
