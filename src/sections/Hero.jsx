@@ -30,10 +30,10 @@ const SKILLS = [
   { name: "Linux", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
   { name: "NPM", level: "Intermediate", years: "1+", progress: 60, category: "Tools" },
 
-  { name: "Python", level: "Advanced", years: "3+", progress: 78, category: "Data Science", placeholder: true },
-  { name: "Pandas & NumPy", level: "Intermediate", years: "2+", progress: 65, category: "Data Science", placeholder: true },
-  { name: "SQL", level: "Intermediate", years: "2+", progress: 68, category: "Data Science", placeholder: true },
-  { name: "Scikit-learn", level: "Intermediate", years: "1+", progress: 60, category: "Data Science", placeholder: true },
+  { name: "Python", level: "Advanced", years: "3+", progress: 78, category: "Data Science", placeholder: false },
+  { name: "Pandas & NumPy", level: "Intermediate", years: "2+", progress: 65, category: "Data Science", placeholder: false },
+  { name: "SQL", level: "Intermediate", years: "2+", progress: 68, category: "Data Science", placeholder: false },
+  { name: "Scikit-learn", level: "Intermediate", years: "1+", progress: 60, category: "Data Science", placeholder: false },
 ];
 
 const SKILL_TABS = ["All", "Web Development", "Tools", "Data Science"];
