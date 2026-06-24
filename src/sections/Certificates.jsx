@@ -17,57 +17,6 @@ import {
 // Fields marked `placeholder: true` render with an amber/italic treatment
 // so they're easy to spot until you fill in the real details.
 // ---------------------------------------------------------------------------
-// const CERTIFICATES = [
-//   {
-//     id: 'ibm-data-science',
-//     issuer: 'Coursera',
-//     issuerSub: 'IBM Skills Network',
-//     title: 'IBM Data Science Specialization',
-//     recipient: 'Mafron Ronaldo Fernandes',
-//     dateLabel: 'February 22, 2024',
-//     duration: 'Approx. 4 months · 10 hrs / week',
-//     blurb:
-//       'Account verified — Coursera certifies successful completion of the IBM Data Science Specialization.',
-//     link: 'https://www.coursera.org/specializations/ibm-data-science',
-//     courses: [
-//       'What is Data Science?',
-//       'Tools for Data Science',
-//       'Data Science Methodology',
-//       'Python for Data Science, AI & Development',
-//       'Python Project for Data Science',
-//       'Databases and SQL for Data Science with Python',
-//       'Data Analysis with Python',
-//       'Data Visualization with Python',
-//       'Machine Learning with Python',
-//       'Applied Data Science Capstone',
-//     ],
-//   },
-//   {
-//     id: ' Meta Front-End Developer Specialization',
-//     issuer: 'Coursera',
-//     issuerSub: 'IBM Skills Network',
-//     title: 'IBM Data Science Specialization',
-//     recipient: 'Mafron Ronaldo Fernandes',
-//     dateLabel: 'February 22, 2024',
-//     duration: 'Approx. 4 months · 10 hrs / week',
-//     blurb:
-//       'Account verified — Coursera certifies successful completion of the IBM Data Science Specialization.',
-//     link: 'https://www.coursera.org/specializations/ibm-data-science',
-//     courses: [
-//       'What is Data Science?',
-//       'Tools for Data Science',
-//       'Data Science Methodology',
-//       'Python for Data Science, AI & Development',
-//       'Python Project for Data Science',
-//       'Databases and SQL for Data Science with Python',
-//       'Data Analysis with Python',
-//       'Data Visualization with Python',
-//       'Machine Learning with Python',
-//       'Applied Data Science Capstone',
-//     ],
-//   },
-//
-// ];
 
 const CERTIFICATES = [
   {
@@ -746,9 +695,15 @@ function Stat({ label, value }) {
   );
 }
 
+const VISIBLE_COUNT = 8;
+
 export function Certificates() {
   const [previewCert, setPreviewCert] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+
   const totalCourses = CERTIFICATES.reduce((sum, c) => sum + (c.courses.length || 1), 0);
+  const visibleCertificates = showAll ? CERTIFICATES : CERTIFICATES.slice(0, VISIBLE_COUNT);
+  const hasMore = CERTIFICATES.length > VISIBLE_COUNT;
 
   return (
     <section
@@ -800,10 +755,26 @@ export function Certificates() {
         </div>
 
         <div className="mt-12 grid sm:grid-cols-2 gap-6">
-          {CERTIFICATES.map((cert) => (
+          {visibleCertificates.map((cert) => (
             <CertificateCard key={cert.id} cert={cert} onPreview={setPreviewCert} />
           ))}
         </div>
+
+        {hasMore && (
+          <div className="mt-10 flex justify-center">
+            <button
+              onClick={() => setShowAll((prev) => !prev)}
+              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-teal-200 backdrop-blur-xl transition-all hover:text-white hover:border-teal-400/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)' }}
+            >
+              {showAll ? 'Show Less' : `Show All ${CERTIFICATES.length} Certificates`}
+              <ChevronDown
+                size={16}
+                className={`transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`}
+              />
+            </button>
+          </div>
+        )}
       </div>
 
       {previewCert && <PreviewModal cert={previewCert} onClose={() => setPreviewCert(null)} />}
