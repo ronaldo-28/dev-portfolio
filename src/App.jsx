@@ -1,5 +1,6 @@
 import {Navbar} from '@/layout/Navbar'
 import {Hero} from '@/sections/Hero'
+import {Skills} from '@/sections/Skills'
 import {About} from '@/sections/About'
 import {Education} from '@/sections/Education'
 import {Projects} from '@/sections/Projects'
@@ -15,6 +16,7 @@ function App() {
       <Navbar />
       <main>
         <Hero />
+        <Skills />
         <About />
         <Projects />
         <Experience />

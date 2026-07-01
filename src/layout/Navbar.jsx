@@ -1,6 +1,7 @@
 import { Button } from "@/components/Button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+
 const navLinks = [
   { href: "#home", label: "Home" },
   { href: "#skills", label: "Skills" },
@@ -12,45 +13,43 @@ const navLinks = [
   { href: "#contact", label: "Contact" },
 ];
 
+// Roughly matches the fixed navbar's height, so a section counts as
+// "active" a little before it physically reaches the top of the viewport.
+const SCROLL_OFFSET = 120;
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("#about");
+  const [activeSection, setActiveSection] = useState("#home");
 
   useEffect(() => {
-  const handleScroll = () => {
-    setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
 
-    const sections = document.querySelectorAll("section[id]");
+      const sections = document.querySelectorAll("section[id]");
 
-    let current = "";
+      // Walk sections top-to-bottom and keep the LAST one whose top has
+      // already been scrolled past. This only needs offsetTop, not
+      // offsetHeight — so unlike checking "is scrollY inside this
+      // section's own [top, top+height) range" independently per section,
+      // there's no way for a height mismatch on one section to create a
+      // gap or overlap that lets another section silently outrank it.
+      let current = null;
 
-    sections.forEach((section) => {
-      const rect = section.getBoundingClientRect();
+      sections.forEach((section) => {
+        if (section.offsetTop - SCROLL_OFFSET <= window.scrollY) {
+          current = `#${section.id}`;
+        }
+      });
 
-      // Active when section center enters viewport
-      if (
-        rect.top <= window.innerHeight * 0.35 &&
-        rect.bottom >= window.innerHeight * 0.35
-      ) {
-        current = `#${section.id}`;
-      }
-    });
+      setActiveSection(current ?? "#home");
+    };
 
-    if (current) {
-      setActiveSection(current);
-    }
-  };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
-  window.addEventListener("scroll", handleScroll);
-
-  handleScroll();
-
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, []);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
@@ -76,7 +75,7 @@ export const Navbar = () => {
                   href={link.href}
                   className={`px-4 py-2 text-sm rounded-full transition-all duration-300 ${
                     isActive
-                      ? "? text-primary bg-primary/20 shadow-[0_0_28px_4px_hsl(var(--primary)/0.8)] scale-105"
+                      ? "text-primary bg-primary/20 shadow-[0_0_28px_4px_hsl(var(--primary)/0.8)] scale-105"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
